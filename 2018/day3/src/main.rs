@@ -15,15 +15,15 @@ fn main() -> Result<()> {
 
   io::stdin().read_to_string(&mut input)?;
 
-  part1(&input);
-  part2(&input);
+  part1(&input)?;
+  part2(&input)?;
 
   Ok(())
 }
 
-fn part1(input: &String) {
+fn part1(input: &String) -> Result<()> {
   let mut fabric = [[0; 1100]; 1100];
-  let rects = parse_rects(input);
+  let rects = parse_rects(input)?;
   for rect in rects {
     for x in rect.tl_x..rect.br_x {
       for y in rect.tl_y..rect.br_y {
@@ -43,11 +43,13 @@ fn part1(input: &String) {
   }
 
   println!("overlapping: {}", overlapping);
+
+  Ok(())
 }
 
-fn part2(input: &String) {
+fn part2(input: &String) -> Result<()> {
   let mut fabric = [[0; 1100]; 1100];
-  let rects = parse_rects(input);
+  let rects = parse_rects(input)?;
   for rect in &rects {
     for x in rect.tl_x..rect.br_x {
       for y in rect.tl_y..rect.br_y {
@@ -69,29 +71,31 @@ fn part2(input: &String) {
     id = rect.id;
   }
   println!("id: {}", id);
+
+  Ok(())
 }
 
-fn parse_rects(rects: &String) -> Vec<Rect> {
+fn parse_rects(rects: &String) -> Result<Vec<Rect>> {
   let rects = rects.lines();
   let mut rectangles: Vec<Rect> = Vec::new();
 
   for rect in rects {
     let split_rect: Vec<&str> = rect.split_whitespace().collect();
 
-    let id = split_rect[0].trim_start_matches("#").parse().unwrap();
+    let id = split_rect[0].trim_start_matches("#").parse()?;
 
     let split_coords = split_rect[2]
       .trim_end_matches(":")
       .split(",")
       .collect::<Vec<&str>>();
 
-    let tl_x: i32 = split_coords[0].parse().unwrap();
-    let tl_y: i32 = split_coords[1].parse().unwrap();
+    let tl_x: i32 = split_coords[0].parse()?;
+    let tl_y: i32 = split_coords[1].parse()?;
 
     let split_dimensions = split_rect[3].split("x").collect::<Vec<&str>>();
 
-    let width: i32 = split_dimensions[0].parse().unwrap();
-    let height: i32 = split_dimensions[1].parse().unwrap();
+    let width: i32 = split_dimensions[0].parse()?;
+    let height: i32 = split_dimensions[1].parse()?;
 
     rectangles.push(Rect {
       id: id,
@@ -102,5 +106,5 @@ fn parse_rects(rects: &String) -> Vec<Rect> {
     });
   }
 
-  rectangles
+  Ok(rectangles)
 }
