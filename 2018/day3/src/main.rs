@@ -36,7 +36,7 @@ fn part1(input: &String) -> Result<()> {
 
   for row in fabric.iter() {
     for column in row.iter() {
-      if *column > 1 {
+      if column > &1 {
         overlapping += 1;
       }
     }
